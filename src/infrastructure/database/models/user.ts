@@ -3,11 +3,11 @@ import instance from "../sequelize";
 
 class UserModel extends Model {
   public id!: string;
-  public username!: string;
+  public fullname!: string;
+  public email!: string;
   public password!: string;
-  public phoneNumber!: string;
-  public active!: boolean;
   public companyid!: string;
+  public active!: boolean;
 }
 
 UserModel.init(
@@ -16,21 +16,25 @@ UserModel.init(
       type: DataTypes.STRING,
       primaryKey: true,
     },
-    username: {
+    fullname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
       defaultValue: true,
     },
     companyid: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    active: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
   },

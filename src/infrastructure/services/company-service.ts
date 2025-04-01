@@ -16,11 +16,6 @@ export class CompanyService implements CompanyRepository {
     return newCompany;
   }
 
-  async find(id: string): Promise<Company | undefined> {
-    const companyExists = await CompanyModel.findOne({ where: { id } });
-    return companyExists ?? undefined;
-  }
-
   async update(company: Company): Promise<Company> {
     const condition = { where: { id: company.id } };
 
@@ -31,5 +26,10 @@ export class CompanyService implements CompanyRepository {
     if (!updatedCompany) throw new Error("Error updating company");
 
     return company;
+  }
+
+  async find(id: string): Promise<Company | undefined> {
+    const companyExists = await CompanyModel.findOne({ where: { id } });
+    return companyExists ?? undefined;
   }
 }
