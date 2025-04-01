@@ -6,6 +6,7 @@ import companyRoutes from "../interfaces/routes/company-routes";
 import userRoutes from "../interfaces/routes/user-routes";
 import categoryRoutes from "../interfaces/routes/category-routes";
 import productRoutes from "../interfaces/routes/product-routes";
+import sellRoutes from "../interfaces/routes/sell-routes";
 
 const app = express();
 const PORT = 3000;
@@ -16,6 +17,7 @@ app.use("/user", userRoutes);
 app.use("/products", productRoutes);
 app.use("/companies", companyRoutes);
 app.use("/categories", categoryRoutes);
+app.use("/sells", sellRoutes);
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT);
