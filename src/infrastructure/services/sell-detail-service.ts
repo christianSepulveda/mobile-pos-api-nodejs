@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { SellDetailRepository } from "../../domain/repositories/sell-repository";
+import { SellDetailRepository } from "../../domain/repositories/sell-detail-repository";
 import { SellDetail } from "../../domain/entities/sell-detail";
 import SellDetailModel from "../database/models/sell-detail";
 

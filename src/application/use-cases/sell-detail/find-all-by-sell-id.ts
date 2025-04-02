@@ -1,5 +1,5 @@
 import { SellDetail } from "../../../domain/entities/sell-detail";
-import { SellDetailRepository } from "../../../domain/repositories/sell-repository";
+import { SellDetailRepository } from "../../../domain/repositories/sell-detail-repository";
 
 export class FindAllSellDetailBySellId {
   private sellDetailRepository: SellDetailRepository;
