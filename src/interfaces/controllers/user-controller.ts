@@ -18,12 +18,11 @@ export class UserController {
     this.find = this.find.bind(this);
   }
 
-  handleError(error: Error) {
-    const status = 500;
+  handleError(error: Error, status?: number) {
     const errorMessage = (error as Error).message;
     const json = { error: true, message: errorMessage, code: status };
 
-    return { status, json };
+    return { status: status ?? 500, json };
   }
 
   handleEncryptionError() {
@@ -82,13 +81,24 @@ export class UserController {
 
       if (!findedUser) {
         const message = "Usuario o contraseña incorrectos";
-        const { status, json } = this.handleError(new Error(message));
+        const { status, json } = this.handleError(new Error(message), 200);
         res.status(status).json(json);
       }
 
       res.status(200).json(findedUser);
-    } catch (error) {
-      const { status, json } = this.handleError(error as Error);
+    } catch (error: any) {
+      const message = error.message;
+
+      const checkMessage =
+        message === "Email incorrecto" || message === "Contraseña incorrecta";
+
+      if (checkMessage) {
+        const { status, json } = this.handleError(error as Error, 200);
+        res.status(status).json(json);
+        return;
+      }
+
+      const { status, json } = this.handleError(error as Error, 500);
       res.status(status).json(json);
     }
   }

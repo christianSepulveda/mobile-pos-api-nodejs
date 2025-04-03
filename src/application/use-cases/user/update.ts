@@ -1,15 +1,15 @@
 import { User } from "../../../domain/entities/user";
-import { UserService } from "../../../infrastructure/services/user-service";
+import { UserRepository } from "../../../domain/repositories/user-repository";
 
 export class UpdateUser {
-  private userService: UserService;
+  private userRepository: UserRepository;
 
-  constructor(userService: UserService) {
-    this.userService = userService;
+  constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
   }
 
   async execute(user: User): Promise<User> {
-    const updatedUser = await this.userService.update(user);
+    const updatedUser = await this.userRepository.update(user);
     return updatedUser;
   }
 }

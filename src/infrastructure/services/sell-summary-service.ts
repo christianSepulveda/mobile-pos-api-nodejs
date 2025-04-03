@@ -7,9 +7,9 @@ import SellModel from "../database/models/sell";
 import SellDetailModel from "../database/models/sell-detail";
 
 export class SellSummaryService implements SellSummaryRepository {
-  async findSellSumaryByDate(date: string): Promise<SellSummary | undefined> {
+  async findSummaryBySell(sellid: string): Promise<SellSummary | undefined> {
     let response: SellSummary = defaultResponse;
-    const sellCondition = { where: { date } };
+    const sellCondition = { where: { id: sellid } };
 
     const findSell = await SellModel.findOne(sellCondition);
     if (!findSell) return undefined;

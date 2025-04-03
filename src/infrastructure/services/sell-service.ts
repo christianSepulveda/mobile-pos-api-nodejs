@@ -9,8 +9,8 @@ export class SellService implements SellRepository {
     return findedSells ?? [];
   }
 
-  async findOne(id: string): Promise<Sell | undefined> {
-    const sell = await SellModel.findByPk(id);
+  async findOne(date: string, companyid: string): Promise<Sell[] | undefined> {
+    const sell = await SellModel.findAll({ where: { date, companyid } });
     return sell ?? undefined;
   }
 

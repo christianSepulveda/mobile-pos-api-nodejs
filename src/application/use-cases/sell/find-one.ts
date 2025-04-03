@@ -8,8 +8,8 @@ export class FindOneSell {
     this.sellRepository = sellRepository;
   }
 
-  async execute(id: string): Promise<Sell | undefined> {
-    const findSell = await this.sellRepository.findOne(id);
+  async execute(date: string, companyid: string): Promise<Sell[] | undefined> {
+    const findSell = await this.sellRepository.findOne(date, companyid);
     return findSell ?? undefined;
   }
 }

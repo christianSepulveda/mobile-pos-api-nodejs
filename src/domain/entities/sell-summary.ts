@@ -1,4 +1,3 @@
-import { Product } from "./product";
 import { Sell } from "./sell";
 import { SellDetail } from "./sell-detail";
 

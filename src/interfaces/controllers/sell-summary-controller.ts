@@ -20,8 +20,8 @@ export class SellSummaryController {
 
   async findSellSumaryByDate(req: Request, res: Response): Promise<void> {
     try {
-      const { date } = req.body;
-      const sellSummary = await findSellSummaryByDate.execute(date);
+      const { sellid } = req.body;
+      const sellSummary = await findSellSummaryByDate.execute(sellid);
 
       const { status, json } = this.handleError(
         new Error("Resumen de venta no encontrado")

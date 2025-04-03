@@ -52,8 +52,8 @@ export class SellController {
 
   async findOne(req: Request, res: Response): Promise<void> {
     try {
-      const { id } = req.body;
-      const findedSell = await findSell.execute(id);
+      const { date, companyid } = req.body;
+      const findedSell = await findSell.execute(date, companyid);
 
       if (!findedSell) {
         const { status, json } = this.handleError(

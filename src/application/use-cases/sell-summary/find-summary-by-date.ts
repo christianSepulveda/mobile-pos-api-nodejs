@@ -8,10 +8,10 @@ export class FindSellSummaryByDate {
     this.sellSummaryRepository = sellSummaryRepository;
   }
 
-  async execute(date: string): Promise<SellSummary | undefined> {
-    const findedUser = await this.sellSummaryRepository.findSellSumaryByDate(
-      date
+  async execute(sellid: string): Promise<SellSummary | undefined> {
+    const findSummary = await this.sellSummaryRepository.findSummaryBySell(
+      sellid
     );
-    return findedUser;
+    return findSummary;
   }
 }
