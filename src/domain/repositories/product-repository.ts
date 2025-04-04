@@ -1,8 +1,8 @@
 import { Product } from "../entities/product";
 
 export type ProductRepository = {
-  save: (product: Product) => Promise<Product>;
-  update: (product: Product) => Promise<Product>;
+  save: (product: Product, companyid: string) => Promise<Product>;
+  update: (product: Product, companyid: string) => Promise<Product>;
   findOne: (id: string) => Promise<Product | undefined>;
-  findAll: () => Promise<Product[]>;
+  findAll: (companyid: string) => Promise<Product[]>;
 };

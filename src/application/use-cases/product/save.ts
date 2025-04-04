@@ -9,9 +9,12 @@ export class SaveProduct {
     this.productRepository = productRepository;
   }
 
-  async execute(product: Product): Promise<Product> {
+  async execute(product: Product, companyid: string): Promise<Product> {
     const id = randomUUID();
-    const newCompany = await this.productRepository.save({ id, ...product });
-    return newCompany;
+    const newProduct = await this.productRepository.save(
+      { ...product, id },
+      companyid
+    );
+    return newProduct;
   }
 }

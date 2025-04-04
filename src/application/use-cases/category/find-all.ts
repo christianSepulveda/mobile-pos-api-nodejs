@@ -8,8 +8,8 @@ export class FindAllCategories {
     this.categoryRepository = categoryRepository;
   }
 
-  async execute(): Promise<Category[]> {
-    const categories = await this.categoryRepository.findAll();
+  async execute(categoryid: string): Promise<Category[]> {
+    const categories = await this.categoryRepository.findAll(categoryid);
     return categories;
   }
 }

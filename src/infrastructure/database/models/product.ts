@@ -7,6 +7,7 @@ class ProductModel extends Model {
   public price!: number;
   public code!: string;
   public category_id!: string;
+  public companyid!: string;
   public active!: boolean;
 }
 
@@ -29,6 +30,10 @@ ProductModel.init(
       allowNull: false,
     },
     category_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    companyid: {
       type: DataTypes.STRING,
       allowNull: false,
     },

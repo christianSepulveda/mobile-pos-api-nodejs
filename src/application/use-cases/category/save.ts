@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { Category } from "../../../domain/entities/category";
 import { CategoryRepository } from "../../../domain/repositories/category-repository";
 
@@ -9,7 +10,12 @@ export class SaveCategory {
   }
 
   async execute(category: Category): Promise<Category> {
-    const savedCategory = await this.categoryRepository.save(category);
+    const id = randomUUID();
+
+    const savedCategory = await this.categoryRepository.save({
+      ...category,
+      id,
+    });
     return savedCategory;
   }
 }

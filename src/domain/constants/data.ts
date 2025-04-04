@@ -6,6 +6,7 @@ export const defaultResponse: SellSummary = {
   time: "",
   total: 0,
   userid: "",
+  payment_method: "",
   companyid: "",
   details: [
     {

@@ -15,32 +15,40 @@ export class SellSummaryService implements SellSummaryRepository {
     if (!findSell) return undefined;
 
     response = { ...findSell.dataValues, details: [] } as SellSummary;
-    const sellDetailCondition = { where: { sellid: findSell.id } };
+
+    const sellDetailCondition = { where: { sellid: findSell.dataValues.id } };
 
     const findSellDetails = await SellDetailModel.findAll(sellDetailCondition);
     if (!findSellDetails) return undefined;
 
     for (let sellDetail of findSellDetails) {
-      const productCondition = { where: { id: sellDetail.productid } };
+      const productCondition = {
+        where: { id: sellDetail.dataValues.productid },
+      };
 
       const findProduct = await ProductModel.findOne(productCondition);
       if (!findProduct) return undefined;
 
-      const categoryCondition = { where: { id: findProduct.category_id } };
+      const categoryCondition = {
+        where: { id: findProduct.dataValues.category_id },
+      };
 
       const findCategory = await CategoryModel.findOne(categoryCondition);
       if (!findCategory) return undefined;
 
       const product = {
-        name: findProduct.name,
-        unit_price: findProduct.price,
-        code: findProduct.code,
-        category: findCategory.name,
+        name: findProduct.dataValues.name,
+        unit_price: findProduct.dataValues.price,
+        code: findProduct.dataValues.code,
+        category: findCategory.dataValues.name,
       };
 
       response = {
         ...response,
-        details: [{ ...sellDetail.dataValues, ...product }],
+        details: [
+          ...response.details,
+          { ...sellDetail.dataValues, ...product },
+        ],
       };
     }
 

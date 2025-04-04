@@ -29,8 +29,8 @@ export class ProductController {
 
   async save(req: Request, res: Response): Promise<void> {
     try {
-      const product = req.body;
-      const newProduct = await saveProduct.execute(product);
+      const { product, companyid } = req.body;
+      const newProduct = await saveProduct.execute(product, companyid);
 
       res.status(200).json(newProduct);
     } catch (error) {
@@ -41,8 +41,8 @@ export class ProductController {
 
   async update(req: Request, res: Response): Promise<void> {
     try {
-      const product = req.body;
-      const updatedProduct = await updateProduct.execute(product);
+      const { product, companyid } = req.body;
+      const updatedProduct = await updateProduct.execute(product, companyid);
       res.status(200).json(updatedProduct);
     } catch (error) {
       const { status, json } = this.handleError(error as Error);
@@ -72,7 +72,8 @@ export class ProductController {
 
   async findAll(req: Request, res: Response): Promise<void> {
     try {
-      const products = await findAllProducts.execute();
+      const { companyid } = req.body;
+      const products = await findAllProducts.execute(companyid);
 
       if (!products) {
         const { status, json } = this.handleError(

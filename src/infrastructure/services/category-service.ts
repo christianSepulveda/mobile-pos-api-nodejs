@@ -36,8 +36,8 @@ export class CategoryService implements CategoryRepository {
     return categoryExists ?? undefined;
   }
 
-  async findAll(): Promise<Category[]> {
-    const categories = await CategoryModel.findAll();
+  async findAll(companyid: string): Promise<Category[]> {
+    const categories = await CategoryModel.findAll({ where: { companyid } });
     return categories;
   }
 }

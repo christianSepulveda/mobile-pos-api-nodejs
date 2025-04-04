@@ -8,8 +8,8 @@ export class UpdateProduct {
     this.productRepository = productRepository;
   }
 
-  async execute(product: Product): Promise<Product> {
-    const newCompany = await this.productRepository.update(product);
+  async execute(product: Product, companyid: string): Promise<Product> {
+    const newCompany = await this.productRepository.update(product, companyid);
     return newCompany;
   }
 }

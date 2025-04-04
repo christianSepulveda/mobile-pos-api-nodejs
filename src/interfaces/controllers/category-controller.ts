@@ -30,7 +30,7 @@ export class CategoryController {
 
   async save(req: Request, res: Response): Promise<void> {
     try {
-      const category = req.body;
+      const { category, companyid } = req.body;
       const newCategory = await saveCategory.execute(category);
 
       res.status(200).json(newCategory);
@@ -73,7 +73,9 @@ export class CategoryController {
 
   async findAll(req: Request, res: Response): Promise<void> {
     try {
-      const categories = await findAllCategories.execute();
+      const { companyid } = req.body;
+
+      const categories = await findAllCategories.execute(companyid);
       res.status(200).json(categories);
     } catch (error) {
       const { status, json } = this.handleError(error as Error);

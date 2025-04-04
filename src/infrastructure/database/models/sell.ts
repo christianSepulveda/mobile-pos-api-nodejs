@@ -7,6 +7,7 @@ class SellModel extends Model {
   public time!: string;
   public total!: number;
   public userid!: string;
+  public payment_method!: string;
   public companyid!: string;
   public active!: boolean;
 }
@@ -27,6 +28,10 @@ SellModel.init(
     },
     total: {
       type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    payment_method: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     userid: {
