@@ -6,5 +6,6 @@ export interface Company {
   email: string;
   expirationDate: string;
   monthlyPayment: number;
+  numberOfRegisters: number;
   active: boolean;
 }

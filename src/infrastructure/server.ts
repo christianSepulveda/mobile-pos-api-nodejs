@@ -9,6 +9,8 @@ import productRoutes from "../interfaces/routes/product-routes";
 import sellRoutes from "../interfaces/routes/sell-routes";
 import sellDetailRoutes from "../interfaces/routes/sell-detail-routes";
 import sellSummaryRoutes from "../interfaces/routes/sell-summary-routes";
+import cashRegisterRoutes from "../interfaces/routes/cash-register-routes";
+import cashMovementRoutes from "../interfaces/routes/cash-movement-routes";
 
 const app = express();
 const PORT = 3000;
@@ -22,6 +24,8 @@ app.use("/categories", categoryRoutes);
 app.use("/sells", sellRoutes);
 app.use("/sell-details", sellDetailRoutes);
 app.use("/sell-summary", sellSummaryRoutes);
+app.use("/cash-registers", cashRegisterRoutes);
+app.use("/cash-movements", cashMovementRoutes);
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT);

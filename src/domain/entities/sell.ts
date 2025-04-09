@@ -5,6 +5,7 @@ export type Sell = {
   total: number;
   payment_method: string;
   userid: string;
+  cash_register_id: string;
   companyid: string;
   active: boolean;
 };

@@ -8,6 +8,7 @@ class CompanyModel extends Model {
   public phoneNumber!: string;
   public email!: string;
   public expirationDate!: string;
+  public numberOfRegisters!: number;
   public monthlyPayment!: number;
   public active!: boolean;
 }
@@ -39,6 +40,10 @@ CompanyModel.init(
       allowNull: false,
     },
     monthlyPayment: {
+      type: DataTypes.DECIMAL,
+      allowNull: false,
+    },
+    numberOfRegisters: {
       type: DataTypes.DECIMAL,
       allowNull: false,
     },

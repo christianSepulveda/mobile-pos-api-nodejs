@@ -1,23 +1,25 @@
 import { DataTypes, Model } from "sequelize";
 import instance from "../sequelize";
 
-class SellModel extends Model {
+export type CashMovementType = "INCOME" | "EXPENSE";
+
+class CashMovementModel extends Model {
   public id!: string;
   public date!: string;
   public time!: string;
-  public total!: number;
-  public userid!: string;
-  public cash_register_id!: string;
-  public payment_method!: string;
-  public companyid!: string;
-  public active!: boolean;
+  public amount!: number;
+  public cashRegisterId!: string;
+  public type!: CashMovementType;
+  public note?: string;
+  public userId!: string;
 }
 
-SellModel.init(
+CashMovementModel.init(
   {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
+      allowNull: false,
     },
     date: {
       type: DataTypes.STRING,
@@ -27,38 +29,33 @@ SellModel.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    total: {
+    amount: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    payment_method: {
+    cashRegisterId: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    userid: {
-      type: DataTypes.STRING,
+    type: {
+      type: DataTypes.ENUM("INCOME", "EXPENSE"),
       allowNull: false,
     },
-    cash_register_id: {
+    note: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    userId: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    companyid: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
     },
   },
   {
     sequelize: instance,
-    modelName: "Sell",
-    tableName: "sells",
+    modelName: "CashMovement",
+    tableName: "cashmovements",
     timestamps: false,
   }
 );
 
-export default SellModel;
+export default CashMovementModel;
