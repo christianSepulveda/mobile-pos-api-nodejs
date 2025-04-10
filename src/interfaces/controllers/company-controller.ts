@@ -5,17 +5,21 @@ import { SaveCompany } from "../../application/use-cases/company/save";
 import { UpdateCompany } from "../../application/use-cases/company/update";
 import { FindCompany } from "../../application/use-cases/company/find";
 import { CompanyService } from "../../infrastructure/services/company-service";
+import passwordEncryption from "../helpers/password-encryption";
+import { IsValidAdminCode } from "../../application/use-cases/company/is-valid-admin-code";
 
 const companyService = new CompanyService();
 const saveCompany = new SaveCompany(companyService);
 const updateCompany = new UpdateCompany(companyService);
 const findCompany = new FindCompany(companyService);
+const isValidAdminCode = new IsValidAdminCode(companyService);
 
 export class CompanyController {
   constructor() {
     this.save = this.save.bind(this);
     this.update = this.update.bind(this);
     this.find = this.find.bind(this);
+    this.isValidAdminCode = this.isValidAdminCode.bind(this);
   }
 
   handleError(error: Error) {
@@ -29,7 +33,19 @@ export class CompanyController {
   async save(req: Request, res: Response): Promise<void> {
     try {
       const company = req.body as Company;
-      const newCompany = await saveCompany.execute(company);
+      const encriptedPassword = await passwordEncryption(company.adminCode);
+
+      if (!encriptedPassword) {
+        const message = "Error al encriptar la contraseña";
+        const { json, status } = this.handleError(new Error(message));
+        res.status(status).json(json);
+        return;
+      }
+
+      const newCompany = await saveCompany.execute({
+        ...company,
+        adminCode: encriptedPassword,
+      });
 
       res.status(200).json(newCompany);
     } catch (error) {
@@ -41,13 +57,27 @@ export class CompanyController {
   async update(req: Request, res: Response): Promise<void> {
     try {
       const company = req.body as Company;
-      const updatedCompany = await updateCompany.execute(company);
+      const encriptedPassword = await passwordEncryption(company.adminCode);
+
+      if (!encriptedPassword) {
+        const message = "Error al encriptar la contraseña";
+        const { json, status } = this.handleError(new Error(message));
+        res.status(status).json(json);
+        return;
+      }
+
+      const updatedCompany = await updateCompany.execute({
+        ...company,
+        adminCode: encriptedPassword,
+      });
+
       res.status(200).json(updatedCompany);
     } catch (error) {
       const { status, json } = this.handleError(error as Error);
       res.status(status).json(json);
     }
   }
+
   async find(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.body;
@@ -59,9 +89,22 @@ export class CompanyController {
         );
 
         res.status(status).json(json);
+        return;
       }
 
       res.status(200).json(findedCompany);
+    } catch (error) {
+      const { status, json } = this.handleError(error as Error);
+      res.status(status).json(json);
+    }
+  }
+
+  async isValidAdminCode(req: Request, res: Response): Promise<void> {
+    try {
+      const { companyid, adminCode } = req.body;
+      const isValid = await isValidAdminCode.execute(companyid, adminCode);
+
+      res.status(200).json({ isValid });
     } catch (error) {
       const { status, json } = this.handleError(error as Error);
       res.status(status).json(json);

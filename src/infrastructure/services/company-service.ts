@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { Company } from "../../domain/entities/company";
 import { CompanyRepository } from "../../domain/repositories/company-repository";
 
@@ -31,5 +32,16 @@ export class CompanyService implements CompanyRepository {
   async find(id: string): Promise<Company | undefined> {
     const companyExists = await CompanyModel.findOne({ where: { id } });
     return companyExists ?? undefined;
+  }
+
+  async isValidAdminCode(
+    companyid: string,
+    adminCode: string
+  ): Promise<boolean> {
+    const company = await CompanyModel.findOne({ where: { id: companyid } });
+    if (!company) return false;
+
+    const isValid = await bcrypt.compare(adminCode, company.adminCode);
+    return isValid;
   }
 }

@@ -10,6 +10,7 @@ class CompanyModel extends Model {
   public expirationDate!: string;
   public numberOfRegisters!: number;
   public monthlyPayment!: number;
+  public adminCode!: string;
   public active!: boolean;
 }
 
@@ -45,6 +46,10 @@ CompanyModel.init(
     },
     numberOfRegisters: {
       type: DataTypes.DECIMAL,
+      allowNull: false,
+    },
+    adminCode: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     active: {
