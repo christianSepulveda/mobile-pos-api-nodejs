@@ -4,6 +4,8 @@ export const defaultResponse: SellSummary = {
   id: "",
   date: "",
   time: "",
+  cash: 0,
+  change: 0,
   total: 0,
   userid: "",
   cash_register_id: "",

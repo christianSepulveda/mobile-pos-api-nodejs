@@ -2,19 +2,24 @@ import { DataTypes, Model } from "sequelize";
 import instance from "../sequelize";
 
 class CashRegisterModel extends Model {
-  public id?: string;
-  public date!: string;
-  public time!: string;
+  public id!: string;
+  public open_userid!: string;
+  public open_date!: string;
+  public open_time!: string;
+  public open_cash!: number;
+
+  public closing_userid!: string;
+  public closing_date!: string;
   public closing_time!: string;
-  public userid!: string;
-  public initial_cash!: number;
+
   public closing_cash!: number;
-  public expected_cash!: number;
-  public cash_difference!: number;
+  public closing_debit!: number;
+  public closing_credit!: number;
+  public closing_transference!: number;
+
   public notes!: string;
-  public total_sales!: number;
-  public companyid!: string;
   public active!: boolean;
+  public companyid!: string;
 }
 
 CashRegisterModel.init(
@@ -22,13 +27,29 @@ CashRegisterModel.init(
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
-      allowNull: true,
+      allowNull: false,
     },
-    date: {
+    open_userid: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    time: {
+    open_date: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    open_time: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    open_cash: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    closing_userid: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    closing_date: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -36,23 +57,19 @@ CashRegisterModel.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    userid: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    initial_cash: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
     closing_cash: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    expected_cash: {
+    closing_debit: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    cash_difference: {
+    closing_credit: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    closing_transference: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
@@ -60,16 +77,12 @@ CashRegisterModel.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    total_sales: {
-      type: DataTypes.FLOAT,
+    active: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     companyid: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
   },

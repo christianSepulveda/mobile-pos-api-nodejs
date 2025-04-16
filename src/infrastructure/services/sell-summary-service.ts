@@ -1,9 +1,10 @@
 import { defaultResponse } from "../../domain/constants/data";
 import { SellSummary } from "../../domain/entities/sell-summary";
 import { SellSummaryRepository } from "../../domain/repositories/sell-summary";
-import CategoryModel from "../database/models/category";
-import ProductModel from "../database/models/product";
+
 import SellModel from "../database/models/sell";
+import ProductModel from "../database/models/product";
+import CategoryModel from "../database/models/category";
 import SellDetailModel from "../database/models/sell-detail";
 
 export class SellSummaryService implements SellSummaryRepository {

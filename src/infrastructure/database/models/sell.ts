@@ -1,11 +1,27 @@
 import { DataTypes, Model } from "sequelize";
 import instance from "../sequelize";
 
-class SellModel extends Model {
+export type Sell = {
+  id?: string;
+  date: string;
+  time: string;
+  total: number;
+  cash: number;
+  change: number;
+  userid: string;
+  payment_method: string;
+  cash_register_id: string;
+  companyid: string;
+  active: boolean;
+};
+
+class SellModel extends Model<Sell> {
   public id!: string;
   public date!: string;
   public time!: string;
   public total!: number;
+  public cash!: number;
+  public change!: number;
   public userid!: string;
   public cash_register_id!: string;
   public payment_method!: string;
@@ -28,6 +44,14 @@ SellModel.init(
       allowNull: false,
     },
     total: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    cash: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    change: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
