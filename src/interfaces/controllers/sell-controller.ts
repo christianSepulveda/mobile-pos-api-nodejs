@@ -72,7 +72,8 @@ export class SellController {
 
   async findAll(req: Request, res: Response): Promise<void> {
     try {
-      const sells = await findAllSells.execute();
+      const { cashRegisterId } = req.body;
+      const sells = await findAllSells.execute(cashRegisterId);
       res.status(200).json(sells);
     } catch (error) {
       const { status, json } = this.handleError(error as Error);

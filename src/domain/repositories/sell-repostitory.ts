@@ -4,5 +4,5 @@ export type SellRepository = {
   save: (sell: Sell) => Promise<Sell>;
   update: (sell: Sell) => Promise<Sell>;
   findOne: (date: string, companyid: string) => Promise<Sell[] | undefined>;
-  findAll: () => Promise<Sell[]>;
+  findAll: (cashRegisterId: string) => Promise<Sell[]>;
 };
