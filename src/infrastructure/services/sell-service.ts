@@ -4,8 +4,10 @@ import { SellRepository } from "../../domain/repositories/sell-repostitory";
 import SellModel from "../database/models/sell";
 
 export class SellService implements SellRepository {
-  async findAll(): Promise<Sell[]> {
-    const findedSells = await SellModel.findAll();
+  async findAll(cashRegisterId: string): Promise<Sell[]> {
+    const condition = { where: { cash_register_id: cashRegisterId } };
+
+    const findedSells = await SellModel.findAll(condition);
     return findedSells ?? [];
   }
 
