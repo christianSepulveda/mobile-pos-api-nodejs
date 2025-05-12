@@ -27,6 +27,17 @@ app.use("/sell-summary", sellSummaryRoutes);
 app.use("/cash-registers", cashRegisterRoutes);
 app.use("/cash-movements", cashMovementRoutes);
 
-sequelize.sync({ force: false }).then(() => {
+const serverListen = () => {
   app.listen(PORT);
-});
+
+  console.info("Database connected");
+  console.info("Server is running on port", PORT);
+  //console.info("Environment:", process.env.NODE_ENV);
+};
+
+const serverError = (error: Error) => {
+  console.error("Error connecting to the database:", error);
+  console.info("Environment:", process.env.NODE_ENV);
+};
+
+sequelize.sync({ force: false }).then(serverListen).catch(serverError);
