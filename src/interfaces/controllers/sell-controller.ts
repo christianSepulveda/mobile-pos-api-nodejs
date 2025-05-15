@@ -4,6 +4,7 @@ import { SaveSell } from "../../application/use-cases/sell/save";
 import { UpdateSell } from "../../application/use-cases/sell/update";
 import { FindOneSell } from "../../application/use-cases/sell/find-one";
 import { FindAllSells } from "../../application/use-cases/sell/find-all";
+import { BuildResponse } from "../helpers/build-response";
 
 const sellService = new SellService();
 const saveSell = new SaveSell(sellService);
@@ -12,30 +13,14 @@ const findSell = new FindOneSell(sellService);
 const findAllSells = new FindAllSells(sellService);
 
 export class SellController {
-  constructor() {
-    this.save = this.save.bind(this);
-    this.update = this.update.bind(this);
-    this.findOne = this.findOne.bind(this);
-    this.findAll = this.findAll.bind(this);
-  }
-
-  handleError(error: Error) {
-    const status = 500;
-    const errorMessage = (error as Error).message;
-    const json = { error: true, message: errorMessage, code: status };
-
-    return { status, json };
-  }
-
   async save(req: Request, res: Response): Promise<void> {
     try {
       const sell = req.body;
       const newSell = await saveSell.execute(sell);
 
-      res.status(200).json(newSell);
+      BuildResponse.success(res, newSell);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -43,10 +28,9 @@ export class SellController {
     try {
       const sell = req.body;
       const updatedSell = await updateSell.execute(sell);
-      res.status(200).json(updatedSell);
+      BuildResponse.success(res, updatedSell);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -56,17 +40,13 @@ export class SellController {
       const findedSell = await findSell.execute(date, companyid);
 
       if (!findedSell) {
-        const { status, json } = this.handleError(
-          new Error("Venta no encontrada")
-        );
-
-        res.status(status).json(json);
+        BuildResponse.error(res, new Error("Venta no encontrada"));
+        return;
       }
 
-      res.status(200).json(findedSell);
+      BuildResponse.success(res, findedSell);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -74,10 +54,9 @@ export class SellController {
     try {
       const { cashRegisterId } = req.body;
       const sells = await findAllSells.execute(cashRegisterId);
-      res.status(200).json(sells);
+      BuildResponse.success(res, sells);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 }

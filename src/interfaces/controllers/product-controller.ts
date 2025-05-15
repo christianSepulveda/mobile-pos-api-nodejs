@@ -4,6 +4,7 @@ import { FindOneProduct } from "../../application/use-cases/product/find-one";
 import { SaveProduct } from "../../application/use-cases/product/save";
 import { UpdateProduct } from "../../application/use-cases/product/update";
 import { ProductService } from "../../infrastructure/services/product-service";
+import { BuildResponse } from "../helpers/build-response";
 
 const productService = new ProductService();
 const saveProduct = new SaveProduct(productService);
@@ -12,30 +13,14 @@ const findProduct = new FindOneProduct(productService);
 const findAllProducts = new FindAllProducts(productService);
 
 export class ProductController {
-  constructor() {
-    this.save = this.save.bind(this);
-    this.update = this.update.bind(this);
-    this.findOne = this.findOne.bind(this);
-    this.findAll = this.findAll.bind(this);
-  }
-
-  handleError(error: Error) {
-    const status = 500;
-    const errorMessage = (error as Error).message;
-    const json = { error: true, message: errorMessage, code: status };
-
-    return { status, json };
-  }
-
   async save(req: Request, res: Response): Promise<void> {
     try {
       const { product, companyid } = req.body;
       const newProduct = await saveProduct.execute(product, companyid);
 
-      res.status(200).json(newProduct);
+      BuildResponse.success(res, newProduct);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -43,10 +28,9 @@ export class ProductController {
     try {
       const { product, companyid } = req.body;
       const updatedProduct = await updateProduct.execute(product, companyid);
-      res.status(200).json(updatedProduct);
+      BuildResponse.success(res, updatedProduct);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -56,17 +40,13 @@ export class ProductController {
       const findedProduct = await findProduct.execute(id);
 
       if (!findedProduct) {
-        const { status, json } = this.handleError(
-          new Error("Producto no encontrado")
-        );
-
-        res.status(status).json(json);
+        BuildResponse.error(res, new Error("Producto no encontrado"));
+        return;
       }
 
-      res.status(200).json(findedProduct);
+      BuildResponse.success(res, findedProduct);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -76,17 +56,13 @@ export class ProductController {
       const products = await findAllProducts.execute(companyid);
 
       if (!products) {
-        const { status, json } = this.handleError(
-          new Error("No hay productos")
-        );
-
-        res.status(status).json(json);
+        BuildResponse.error(res, new Error("No hay productos"));
+        return;
       }
 
-      res.status(200).json(products);
+      BuildResponse.success(res, products);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 }

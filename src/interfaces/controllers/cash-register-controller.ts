@@ -5,6 +5,7 @@ import { SaveCashRegister } from "../../application/use-cases/cash-register/save
 import { UpdateCashRegister } from "../../application/use-cases/cash-register/update";
 import { CashRegister } from "../../domain/entities/cash-register";
 import { CashRegisterService } from "../../infrastructure/services/cash-register-service";
+import { BuildResponse } from "../helpers/build-response";
 
 const cashRegisterService = new CashRegisterService();
 const saveCashRegister = new SaveCashRegister(cashRegisterService);
@@ -13,30 +14,14 @@ const findCashRegister = new FindOneCashRegister(cashRegisterService);
 const findAllCashRegisters = new FindAllCashRegister(cashRegisterService);
 
 export class CashRegisterController {
-  constructor() {
-    this.save = this.save.bind(this);
-    this.update = this.update.bind(this);
-    this.findOne = this.findOne.bind(this);
-    this.findAll = this.findAll.bind(this);
-  }
-
-  handleError(error: Error) {
-    const status = 500;
-    const errorMessage = (error as Error).message;
-    const json = { error: true, message: errorMessage, code: status };
-
-    return { status, json };
-  }
-
   async save(req: Request, res: Response): Promise<void> {
     try {
       const cashRegister = req.body;
       const newCashRegister = await saveCashRegister.execute(cashRegister);
 
-      res.status(200).json(newCashRegister);
+      BuildResponse.success(res, newCashRegister);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -46,10 +31,9 @@ export class CashRegisterController {
       const updatedCashRegister = await updateCashRegister.execute(
         cashRegister
       );
-      res.status(200).json(updatedCashRegister);
+      BuildResponse.success(res, updatedCashRegister);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -59,17 +43,13 @@ export class CashRegisterController {
       const foundCashRegister = await findCashRegister.execute(id);
 
       if (!foundCashRegister) {
-        const { status, json } = this.handleError(
-          new Error("Cash register not found")
-        );
-
-        res.status(status).json(json);
+        BuildResponse.error(res, new Error("Cash register not found"));
+        return;
       }
 
-      res.status(200).json(foundCashRegister);
+      BuildResponse.success(res, foundCashRegister);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -77,10 +57,9 @@ export class CashRegisterController {
     try {
       const { companyid } = req.body;
       const cashRegisters = await findAllCashRegisters.execute(companyid);
-      res.status(200).json(cashRegisters);
+      BuildResponse.success(res, cashRegisters);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 }

@@ -3,6 +3,7 @@ import { FinAllCashMovement } from "../../application/use-cases/cash-movement/fi
 import { SaveCashMovement } from "../../application/use-cases/cash-movement/save";
 import { UpdateCashMovement } from "../../application/use-cases/cash-movement/update";
 import { CashMovementService } from "../../infrastructure/services/cash-movement-service";
+import { BuildResponse } from "../helpers/build-response";
 
 const cashMovementService = new CashMovementService();
 const saveCashMovement = new SaveCashMovement(cashMovementService);
@@ -10,29 +11,14 @@ const updateCashMovement = new UpdateCashMovement(cashMovementService);
 const findCashMovement = new FinAllCashMovement(cashMovementService);
 
 export class CashMovementController {
-  constructor() {
-    this.save = this.save.bind(this);
-    this.update = this.update.bind(this);
-    this.findAll = this.findAll.bind(this);
-  }
-
-  handleError(error: Error) {
-    const status = 500;
-    const errorMessage = (error as Error).message;
-    const json = { error: true, message: errorMessage, code: status };
-
-    return { status, json };
-  }
-
   async save(req: Request, res: Response): Promise<void> {
     try {
       const cashMovement = req.body;
       const newCashMovement = await saveCashMovement.execute(cashMovement);
 
-      res.status(200).json(newCashMovement);
+      BuildResponse.success(res, newCashMovement);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -42,10 +28,9 @@ export class CashMovementController {
       const updatedCashMovement = await updateCashMovement.execute(
         cashRegister
       );
-      res.status(200).json(updatedCashMovement);
+      BuildResponse.success(res, updatedCashMovement);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 
@@ -53,10 +38,9 @@ export class CashMovementController {
     try {
       const { cashRegisterId } = req.body;
       const cashRegisters = await findCashMovement.execute(cashRegisterId);
-      res.status(200).json(cashRegisters);
+      BuildResponse.success(res, cashRegisters);
     } catch (error) {
-      const { status, json } = this.handleError(error as Error);
-      res.status(status).json(json);
+      BuildResponse.error(res, error as Error);
     }
   }
 }
