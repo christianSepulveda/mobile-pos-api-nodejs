@@ -11,6 +11,7 @@ class CompanyModel extends Model {
   public numberOfRegisters!: number;
   public monthlyPayment!: number;
   public adminCode!: string;
+  public activeBarCodeScanner!: boolean;
   public active!: boolean;
 }
 
@@ -50,6 +51,10 @@ CompanyModel.init(
     },
     adminCode: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    activeBarCodeScanner: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     active: {

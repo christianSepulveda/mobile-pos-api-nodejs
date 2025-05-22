@@ -8,5 +8,6 @@ export interface Company {
   monthlyPayment: number;
   numberOfRegisters: number;
   adminCode: string;
+  activeBarCodeScanner: boolean;
   active: boolean;
 }

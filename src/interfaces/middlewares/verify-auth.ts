@@ -32,7 +32,8 @@ export const authMiddleware = (
   }
 
   try {
-    const secretKey = process.env.JWT_SECRET_KEY;
+    const secretKey = process.env.JWT_SECRET;
+
     if (!secretKey) {
       BuildResponse.error(res, {
         name: "UnauthorizedError",
