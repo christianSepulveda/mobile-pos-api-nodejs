@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { CashMovementController } from "../controllers/cash-movement-controller";
+import { authMiddleware } from "../middlewares/auth-middleware";
 
 const router = Router();
 const cashMovementController = new CashMovementController();
 
-router.post("/save", cashMovementController.save);
-router.post("/update", cashMovementController.update);
-router.post("/find-all", cashMovementController.findAll);
+router.post("/save", authMiddleware, cashMovementController.save);
+router.post("/update", authMiddleware, cashMovementController.update);
+router.post("/find-all", authMiddleware, cashMovementController.findAll);
 
 export default router;

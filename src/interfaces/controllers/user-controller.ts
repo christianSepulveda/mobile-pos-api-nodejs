@@ -6,6 +6,13 @@ import { User } from "../../domain/entities/user";
 import { Request, Response } from "express";
 import passwordEncryption from "../helpers/password-encryption";
 import { BuildResponse } from "../helpers/build-response";
+import {
+  generateAuthToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../helpers/token-handler";
+import { JsonWebTokenError, JwtPayload, TokenExpiredError } from "jsonwebtoken";
+import { Login } from "../../domain/repositories/user-repository";
 
 const userService = new UserService();
 const saveUser = new SaveUser(userService);
@@ -61,9 +68,49 @@ export class UserController {
         return;
       }
 
-      BuildResponse.success(res, foundUser);
+      const payload = { id: foundUser.id, email: foundUser.email };
+      const authToken = generateAuthToken(payload);
+      const refreshToken = generateRefreshToken(payload);
+
+      const user = { ...foundUser, password: "" };
+      const authorization = { authToken, refreshToken };
+
+      BuildResponse.success(res, { user, authorization });
     } catch (error: any) {
       BuildResponse.error(res, error as Error);
+    }
+  }
+
+  async refreshToken(req: Request, res: Response): Promise<void> {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      BuildResponse.error(res, new Error("No a facilitado un Token"));
+      return;
+    }
+
+    try {
+      const payload = verifyRefreshToken(refreshToken) as JwtPayload & Login;
+
+      const newAuthToken = generateAuthToken({
+        id: payload.id,
+        email: payload.email,
+      });
+
+      res.json({ authToken: newAuthToken });
+    } catch (err) {
+      if (err instanceof TokenExpiredError) {
+        BuildResponse.authError(res, new Error("Token expirado"));
+        return;
+      }
+
+      if (err instanceof JsonWebTokenError) {
+        BuildResponse.authError(res, new Error("Token malformado"));
+        return;
+      }
+
+      console.error(err);
+      BuildResponse.error(res, new Error("Internal server error"));
     }
   }
 }

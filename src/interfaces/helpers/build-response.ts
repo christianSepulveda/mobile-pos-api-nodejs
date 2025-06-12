@@ -17,4 +17,13 @@ export class BuildResponse {
     console.error(response);
     return res.status(status).json(response);
   }
+
+  static authError(res: Response, error: Error) {
+    const status = 401;
+    const message = error.message;
+    const response = { error: true, status, message, data: [] };
+
+    console.error(response);
+    return res.status(status).json(response);
+  }
 }

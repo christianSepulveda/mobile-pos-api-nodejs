@@ -43,6 +43,6 @@ export class UserService implements UserRepository {
     const isPasswordValid = await bcrypt.compare(request, current);
     if (!isPasswordValid) throw new Error("Contraseña incorrecta");
 
-    return userExists ?? undefined;
+    return userExists.dataValues ?? undefined;
   }
 }
